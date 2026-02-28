@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <div>
+        <h1>Hey, {{ session.username }}! 👋</h1>
+        <p style="color:#718096; font-size:14px; margin-top:4px;">Here's current the weather in your saved cities.</p>
+    </div>
+</div>
+
+<!-- Add city form -->
+<div class="card" style="margin-bottom:28px;">
+    <p style="font-size:12px; color:#718096; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">➕ Add a city</p>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form method="POST" action="/add" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+        <div style="flex:2; min-width:150px;">
+            <label>City name</label>
+            <input type="text" name="name" placeholder="London, Tokyo, Riga..." style="margin-bottom:0;" required>
+        </div>
+        <div style="flex:1; min-width:80px;">
+            <label>Country code (optional)</label>
+            <input type="text" name="country" placeholder="GB, JP, LV..." maxlength="2" style="margin-bottom:0;">
+        </div>
+        <button type="submit" class="btn">Add</button>
+    </form>
+</div>
+
+<!-- Weather cards -->
+{% if weather_list %}
+<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:16px;">
+    {% for w in weather_list %}
+    <div style="
+        background: {% if w.error %}rgba(231,76,60,0.1){% else %}linear-gradient(135deg, rgba(45,110,232,0.2), rgba(116,185,255,0.1)){% endif %};
+        border: 1px solid {% if w.error %}rgba(231,76,60,0.3){% else %}rgba(116,185,255,0.2){% endif %};
+        border-radius: 14px;
+        padding: 20px;
+        position: relative;
+    ">
+        {% if w.error %}
+            <p style="color:#ff7675; font-size:13px;">⚠ {{ w.error }}</p>
+        {% else %}
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                    <div style="font-size:18px; font-weight:700;">{{ w.city }}</div>
+                    <div style="font-size:13px; color:#718096; margin-top:2px;">{{ w.desc }}</div>
+                </div>
+                <img src="https://openweathermap.org/img/wn/{{ w.icon }}@2x.png"
+                     alt="{{ w.desc }}"
+                     style="width:50px; height:50px; margin-top:-8px;"
+                     onerror="this.style.display='none'">
+            </div>
+            <div style="font-size:40px; font-weight:800; margin:12px 0 14px; color:#74b9ff;">
+                {{ w.temp }}°C
+            </div>
+            <div style="font-size:12px; color:#718096; display:flex; gap:14px;">
+                <span>💧 {{ w.humidity }}%</span>
+                <span>💨 {{ w.wind }} m/s</span>
+            </div>
+        {% endif %}
+
+        <!-- Delete button -->
+        <a href="/delete/{{ w.db_id }}"
+           class="btn btn-red btn-sm"
+           style="position:absolute; top:12px; right:12px;"
+           onclick="return confirm('Remove {{ w.city if not w.error else 'this city' }}?')">✕</a>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div style="text-align:center; padding:60px 20px; color:#4a5568;">
+    <div style="font-size:48px; margin-bottom:14px;">🌍</div>
+    <p style="font-size:16px;">No cities added yet.</p>
+    <p style="font-size:13px; margin-top:6px;">Add your first city above!</p>
+</div>
+{% endif %}
+
+{% endblock %}

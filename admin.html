@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+{% block content %}
+
+<h1 style="margin-bottom:6px;">⚙ Admin Panel</h1>
+<p style="color:#718096; font-size:14px; margin-bottom:24px;">Overview of all users.</p>
+
+<!-- Stats -->
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px;">
+    <div class="card" style="text-align:center; padding:20px;">
+        <div style="font-size:36px; font-weight:800; color:#74b9ff;">{{ users | length }}</div>
+        <div style="font-size:12px; color:#718096; margin-top:4px; text-transform:uppercase; letter-spacing:0.05em;">Users</div>
+    </div>
+    <div class="card" style="text-align:center; padding:20px;">
+        <div style="font-size:36px; font-weight:800; color:#74b9ff;">{{ total_cities }}</div>
+        <div style="font-size:12px; color:#718096; margin-top:4px; text-transform:uppercase; letter-spacing:0.05em;">Saved Cities</div>
+    </div>
+    <div class="card" style="text-align:center; padding:20px;">
+        <div style="font-size:36px; font-weight:800; color:#74b9ff;">
+            {{ users | selectattr('role', 'equalto', 'admin') | list | length }}
+        </div>
+        <div style="font-size:12px; color:#718096; margin-top:4px; text-transform:uppercase; letter-spacing:0.05em;">Admins</div>
+    </div>
+</div>
+
+<!-- Users table -->
+<div class="card">
+    <p style="font-size:12px; color:#718096; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:14px;">Registered Users</p>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Saved cities</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td style="color:#4a5568;">{{ u.id }}</td>
+                <td style="font-weight:600;">{{ u.username }}</td>
+                <td>
+                    <span style="
+                        font-size:11px; padding:3px 10px; border-radius:20px;
+                        {% if u.role == 'admin' %}
+                            background:rgba(116,185,255,0.15); color:#74b9ff; border:1px solid rgba(116,185,255,0.3);
+                        {% else %}
+                            background:rgba(255,255,255,0.06); color:#a0aec0; border:1px solid rgba(255,255,255,0.1);
+                        {% endif %}
+                    ">{{ u.role }}</span>
+                </td>
+                <td>{{ u.city_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Weather Dashboard{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1a1f35;
+            color: #e0e6f0;
+            min-height: 100vh;
+        }
+        nav {
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 18px; font-weight: 700; color: #74b9ff; }
+        nav a { color: #a0aec0; text-decoration: none; font-size: 13px; margin-left: 18px; }
+        nav a:hover { color: #74b9ff; }
+        .container { max-width: 960px; margin: 0 auto; padding: 36px 20px; }
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+        .card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .error {
+            background: rgba(231,76,60,0.15);
+            border: 1px solid rgba(231,76,60,0.4);
+            color: #ff7675;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        label { font-size: 12px; font-weight: 600; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; }
+        input {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #e0e6f0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            outline: none;
+        }
+        input:focus { border-color: #74b9ff; }
+        input::placeholder { color: #4a5568; }
+        .btn {
+            background: #2d6ee8;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { background: #3d7ff5; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn-red { background: rgba(231,76,60,0.2); color: #ff7675; border: 1px solid rgba(231,76,60,0.3); }
+        .btn-red:hover { background: rgba(231,76,60,0.35); }
+        .btn-ghost { background: rgba(255,255,255,0.08); color: #a0aec0; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.14); color: #fff; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 10px 12px; font-size: 12px; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        td { padding: 12px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">🌤 Weather Dashboard</div>
+        <div>
+            {% if session.get('username') %}
+                <span style="color:#718096; font-size:13px;">{{ session.username }}</span>
+                {% if session.role == 'admin' %}<a href="/admin">Admin</a>{% endif %}
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
