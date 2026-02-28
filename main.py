@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.secret_key = "weather_secret_2024"
 
 # Replace "demo" with a free API key from openweathermap.org
-API_KEY = "bd0640a8b8a7760f69014adaf80a1f2d"
+API_KEY = "demo"
 
 
 #DATABASE
